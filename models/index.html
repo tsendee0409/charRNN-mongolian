@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>CharRNN</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+  </head>
+
+  <body>
+    <h1>CharRNN</h1>
+    <script>
+      // Create the character level generator with a pre trained model
+      const rnn = ml5.charRNN("mongolia-long/", modelLoaded);
+
+      // When the model is loaded
+      function modelLoaded() {
+        console.log("Model Loaded!");
+      }
+
+      // Generate content
+      rnn.generate({ seed: "Эдийн засги", length: 20 }, (err, results) => {
+        console.log(results);
+      });
+    </script>
+  </body>
+</html>
