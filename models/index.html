@@ -2,25 +2,103 @@
   <head>
     <meta charset="UTF-8" />
     <title>CharRNN</title>
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+    <style>
+      html {
+        font-size: 1rem;
+        font-family: "PT Sans", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .header h2 {
+        margin-top: 60px;
+        margin-bottom: 40px;
+        color: rgba(255, 122, 122, 1);
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 100px;
+        color: #999;
+      }
+
+      .footer p {
+        margin: 5px 0;
+      }
+
+      .container {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .autoComplete_wrapper > input {
+        width: 640px;
+      }
+    </style>
   </head>
 
   <body>
-    <h1>CharRNN</h1>
+    <header class="header">
+      <h2>Mongolian charRNN model for ml5js</h2>
+    </header>
+    <div class="container" align="center">
+      <div class="autoComplete_wrapper">
+        <input
+          id="autoComplete"
+          type="search"
+          dir="ltr"
+          spellcheck="false"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+        />
+      </div>
+    </div>
+    <footer class="footer">
+      <p>Mongul in Tech 2023</p>
+      <p>Developed by Tsend-Ayush.Sh</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
     <script>
-      // Create the character level generator with a pre trained model
-      const rnn = ml5.charRNN("mongolia-long/", modelLoaded);
+      const autoCompleteJS = new autoComplete({
+        placeHolder: "Текст оруулна уу...",
+        data: {
+          src: async (query) => {
+            const text = await rnnLong.generate({ seed: query, length: 30 });
+            console.log(text);
+            return [query + text.sample.replace("\n", "")];
+          },
+          cache: false,
+        },
+        resultItem: {
+          highlight: true,
+        },
+        events: {
+          input: {
+            selection: (event) => {
+              const selection = event.detail.selection.value;
+              autoCompleteJS.input.value = selection;
+            },
+          },
+        },
+      });
 
-      // When the model is loaded
-      function modelLoaded() {
-        console.log("Model Loaded!");
-      }
-
-      // Generate content
-      rnn.generate({ seed: "Эдийн засги", length: 20 }, (err, results) => {
-        console.log(results);
+      const rnnLong = ml5.charRNN("mongolia-long/", () => {
+        console.log("mongolia-long model loaded!");
       });
     </script>
   </body>

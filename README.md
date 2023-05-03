@@ -21,5 +21,5 @@ $ sudo docker run -it --rm -v "$PWD":/usr/src/char-rnn -w /usr/src/char-rnn tens
 ### Run Nginx in Docker container
 
 ```bash
-$ sudo docker run --name char-rnn-nginx -v "$PWD/models":/usr/share/nginx/html:ro -p 80:80 -d nginx:latest
+$ sudo docker run --rm --name char-rnn-nginx -v "$PWD/models":/usr/share/nginx/html:ro -p 80:80 -d nginx:latest
 ```
